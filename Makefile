@@ -12,11 +12,12 @@ PYTHON_INTERPRETER = python
 
 
 ## Install Python Dependencies and pre-commit
+## Install Python Dependencies and pre-commit
 .PHONY: requirements
 requirements:
-	$(PYTHON_INTERPRETER) -m pip install -U pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	pre-commit install
+	poetry self update
+	poetry install
+	poetry run pre-commit install
 	
 
 
