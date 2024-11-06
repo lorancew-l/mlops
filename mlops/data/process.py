@@ -1,5 +1,6 @@
 import argparse
 from pathlib import Path
+from typing import Union
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -7,17 +8,17 @@ from dotenv import load_dotenv
 from mlops.data.s3_manager import S3Manager
 
 
-def process(in_file, out_file):
+def process(in_file: Union[str, Path], out_file: Union[str, Path]) -> None:
     df = pd.read_csv(in_file)
     passenger_counts = df["Pclass"].value_counts().sort_index()
 
     passenger_counts_df = passenger_counts.reset_index()
-    passenger_counts_df.columns = ["Pclass", "PassengerCount"]
+    passenger_counts_df.columns = pd.Index(["Pclass", "PassengerCount"])
 
     passenger_counts_df.to_csv(out_file, index=False)
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
     load_dotenv()
 
     data_folder = Path(__file__).resolve().parents[2].joinpath("data")

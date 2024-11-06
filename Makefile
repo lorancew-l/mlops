@@ -38,7 +38,7 @@ lint:
 ## typecheck using mypy
 .PHONY: typecheck
 typecheck:
-	mypy --config-file=mypy.ini mlops
+	mypy --config-file=mypy.ini mlops scripts
 
 ## Format source code with black
 .PHONY: format

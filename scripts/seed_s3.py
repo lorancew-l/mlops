@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from mlops.data.s3_manager import S3Manager
 
 
-def main(args):
+def main(args: argparse.Namespace) -> None:
     load_dotenv()
 
     file_path = Path(__file__).resolve().parent.joinpath(args.dataset)
