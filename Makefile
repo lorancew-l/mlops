@@ -11,11 +11,12 @@ PYTHON_INTERPRETER = python
 #################################################################################
 
 
-## Install Python Dependencies
+## Install Python Dependencies and pre-commit
 .PHONY: requirements
 requirements:
 	$(PYTHON_INTERPRETER) -m pip install -U pip
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	pre-commit install
 	
 
 
@@ -29,9 +30,14 @@ clean:
 ## Lint using flake8 and black (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 mlops
 	isort --check --diff --profile black mlops
 	black --check --config pyproject.toml mlops
+	flake8 --config=.flake8 mlops
+	
+## typecheck using mypy
+.PHONY: typecheck
+typecheck:
+	mypy --config-file=mypy.ini mlops
 
 ## Format source code with black
 .PHONY: format

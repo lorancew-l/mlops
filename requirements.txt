@@ -1,5 +1,7 @@
 black
 flake8
+mypy
+pre-commit
 isort
 pip
 python-dotenv
