@@ -55,3 +55,29 @@ ETL - скрипт:
 ```sh
 make process BUCKET=dataset IN_OBJECT=titanic.csv OUT_OBJECT=titanic_processed.csv
 ```
+
+## Запуск экспериментов
+
+Подготовка образа:
+
+```sh
+chmod +X setup_experiments.sh && ./setup_experiments.sh
+```
+
+Загрузка датасета ("сида") в s3 (если еще не сделано)
+
+```sh
+make seed_s3 BUCKET=dataset OBJECT=titanic.csv
+```
+
+Подготовка данных:
+
+```sh
+make process BUCKET=dataset IN_OBJECT=titanic.csv OUT_OBJECT=titanic_processed.csv
+```
+
+Запуск экспериментов:
+
+```sh
+make run_experiments DATASET=dataset/titanic_processed.csv CONFIG="./mlops/models/titanic_classifier/config.yaml"
+```

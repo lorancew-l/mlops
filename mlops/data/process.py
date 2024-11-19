@@ -10,20 +10,29 @@ from mlops.data.s3_manager import S3Manager
 
 def process(in_file: Union[str, Path], out_file: Union[str, Path]) -> None:
     df = pd.read_csv(in_file)
-    passenger_counts = df["Pclass"].value_counts().sort_index()
 
-    passenger_counts_df = passenger_counts.reset_index()
-    passenger_counts_df.columns = pd.Index(["Pclass", "PassengerCount"])
+    df["Age"].fillna(df["Age"].mean(), inplace=True)
+    df["Fare"].fillna(df["Fare"].mean(), inplace=True)
+    df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
+    df["Embarked"] = df["Embarked"].map({"C": 0, "Q": 1, "S": 2}).fillna(2)
+    df = df[["Pclass", "Sex", "Age", "Fare", "Embarked", "Survived"]]
 
-    passenger_counts_df.to_csv(out_file, index=False)
+    df.to_csv(out_file, index=False)
 
 
 def main(args: argparse.Namespace) -> None:
     load_dotenv()
 
     data_folder = Path(__file__).resolve().parents[2].joinpath("data")
-    download_file_path = data_folder.joinpath("raw", args.in_object)
-    processed_file_path = data_folder.joinpath("processed", args.in_object)
+
+    download_folder_path = data_folder.joinpath("raw")
+    processed_folder_path = data_folder.joinpath("processed")
+
+    download_file_path = data_folder.joinpath(download_folder_path, args.in_object)
+    processed_file_path = data_folder.joinpath(processed_folder_path, args.in_object)
+
+    Path(download_folder_path).mkdir(parents=True, exist_ok=True)
+    Path(processed_folder_path).mkdir(parents=True, exist_ok=True)
 
     manager = S3Manager(args.bucket)
 
