@@ -4,7 +4,7 @@
 
 PROJECT_NAME = mlops
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = ./venv/Scripts/python
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -12,11 +12,12 @@ PYTHON_INTERPRETER = python
 
 
 ## Install Python Dependencies and pre-commit
+## Install Python Dependencies and pre-commit
 .PHONY: requirements
 requirements:
-	$(PYTHON_INTERPRETER) -m pip install -U pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	pre-commit install
+	poetry self update
+	poetry install
+	poetry run pre-commit install
 	
 
 
@@ -37,15 +38,22 @@ lint:
 ## typecheck using mypy
 .PHONY: typecheck
 typecheck:
-	mypy --config-file=mypy.ini mlops
+	mypy --config-file=mypy.ini mlops scripts
 
 ## Format source code with black
 .PHONY: format
 format:
 	black --config pyproject.toml mlops
 
+## Seed s3
+.PHONY: seed_s3
+seed_s3:
+	$(PYTHON_INTERPRETER) ./scripts/seed_s3.py --bucket $(BUCKET) --object $(OBJECT)
 
-
+## Process dataset
+.PHONY: process
+process:
+	$(PYTHON_INTERPRETER) ./mlops/data/process.py --bucket $(BUCKET) --in-object $(IN_OBJECT) --out-object $(OUT_OBJECT)
 
 ## Set up python interpreter environment
 .PHONY: create_environment

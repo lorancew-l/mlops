@@ -2,25 +2,56 @@
 
 ## Установка окружения
 
-Создание виртуального окружения:
+### Создание виртуального окружения
 
 ```bash
 python -m venv venv
 ```
 
-Активация окружения:
+### Активация окружения
 
-- На Mac/Linux: `source ./venv/bin/activate`
-- На Windows: `bash ./venv/Scripts/activate`
+`source ./venv/bin/activate`
 
-Установка зависимостей и pre-commit hooks:
+### Установка зависимостей и pre-commit hooks:
 
 ```bash
 make requirements
 ```
 
+### Создание .env
+
+```sh
+cp ./.env.example ./.env
+```
+
+### Запуск minio
+
+```sh
+docker-compose --env-file .env up -d
+```
+
+### Загрузка датасета ("сида") в minio
+
+```sh
+make seed_s3 BUCKET=dataset OBJECT=titanic.csv
+```
+
 ## Команды
 
-Запуск линтера: `make lint`
+Запуск линтера:
 
-Проверка типов: `make typecheck`
+```sh
+make lint
+```
+
+Проверка типов:
+
+```sh
+make typecheck
+```
+
+ETL - скрипт:
+
+```sh
+make process BUCKET=dataset IN_OBJECT=titanic.csv OUT_OBJECT=titanic_processed.csv
+```
