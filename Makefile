@@ -55,6 +55,11 @@ seed_s3:
 process:
 	$(PYTHON_INTERPRETER) ./mlops/data/process.py --bucket $(BUCKET) --in-object $(IN_OBJECT) --out-object $(OUT_OBJECT)
 
+## Run experiments
+.PHONY: run_experiments
+run_experiments:
+	$(PYTHON_INTERPRETER) ./scripts/run_experiments.py --dataset-path $(DATASET) --config-path $(CONFIG)
+
 ## Set up python interpreter environment
 .PHONY: create_environment
 create_environment:

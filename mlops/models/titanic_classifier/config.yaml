@@ -1,0 +1,12 @@
+model: "titanic_classifier"
+hyperparameters:
+  max_depth:
+    - 5
+    - 10
+    - 15
+  max_features:
+    - "sqrt"
+    - "log2"
+  n_estimators:
+    - 100
+    - 200
